@@ -1,44 +1,54 @@
-import { StatusBar } from 'expo-status-bar';
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, SafeAreaView, TextInput, TouchableOpacity } from 'react-native';
+import { StatusBar } from "expo-status-bar";
+import React, { useState } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  SafeAreaView,
+  TextInput,
+  TouchableOpacity,
+} from "react-native";
 
-import firebase from '../../services/firebaseConnection'
+import firebase from "../../services/firebaseConnection";
 
 export default function Login({ changeStatus }) {
-  const [type, setType] = useState('login')
+  const [type, setType] = useState("login");
 
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  function handleLogin(){
-    if(type === 'login'){
+  function handleLogin() {
+    if (type === "login") {
       // Aqui fazemos o login
-      const user = firebase.auth().signInWithEmailAndPassword(email, password)
-      .then((user) => {
-        changeStatus(user.user.uid)
-      })
-      .catch((err) => {
-        console.log(err)
-        alert('Ops, parece que deu algum erro')
-      })
+      const user = firebase
+        .auth()
+        .signInWithEmailAndPassword(email, password)
+        .then((user) => {
+          changeStatus(user.user.uid);
+        })
+        .catch((err) => {
+          console.log(err);
+          alert("Ops, parece que deu algum erro");
+        });
       return;
-
-    }else{
+    } else {
       // Aqui cadastramos o usuario
-      const user = firebase.auth().createUserWithEmailAndPassword(email, password)
-      .then((user) => {
-        changeStatus(user.user.uid)
-      })
-      .catch((err) => {
-        console.log(err)
-        alert('Ops, parece que algo está errado')
-        return;
-      })
+      const user = firebase
+        .auth()
+        .createUserWithEmailAndPassword(email, password)
+        .then((user) => {
+          changeStatus(user.user.uid);
+        })
+        .catch((err) => {
+          console.log(err);
+          alert("Ops, parece que algo está errado");
+          return;
+        });
     }
   }
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#F2F6FC' }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#F2F6FC" }}>
       <StatusBar style="auto" />
       <View style={styles.container}>
         <TextInput
@@ -53,23 +63,30 @@ export default function Login({ changeStatus }) {
           style={styles.input}
           value={password}
           onChangeText={(text) => setPassword(text)}
+          secureTextEntry={true}
         />
 
         <TouchableOpacity
-          style={[styles.handleLogin, { backgroundColor: type === 'login' ? '#3ea6f2' : '#141414' }]}
+          style={[
+            styles.handleLogin,
+            { backgroundColor: type === "login" ? "#3ea6f2" : "#141414" },
+          ]}
           onPress={handleLogin}
         >
-            <Text style={styles.loginText}>
-              {type === 'login' ? 'Acessar' : 'Cadastrar'}
-            </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={() => setType(type => type === 'login' ? 'cadastrar' : 'login')}>
-          <Text style={{ textAlign: 'center' }}>
-            {type === 'login' ? 'Criar uma conta' : 'Já possuo uma conta'}
+          <Text style={styles.loginText}>
+            {type === "login" ? "Acessar" : "Cadastrar"}
           </Text>
         </TouchableOpacity>
 
+        <TouchableOpacity
+          onPress={() =>
+            setType((type) => (type === "login" ? "cadastrar" : "login"))
+          }
+        >
+          <Text style={{ textAlign: "center" }}>
+            {type === "login" ? "Criar uma conta" : "Já possuo uma conta"}
+          </Text>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
@@ -81,23 +98,23 @@ const styles = StyleSheet.create({
     paddingTop: 40,
     paddingHorizontal: 10,
   },
-  input:{
-      marginBottom: 10,
-      backgroundColor: '#fff',
-      borderRadius: 4,
-      height: 45,
-      padding: 10,
-      borderWidth: 1,
-      borderColor: '#141414'
+  input: {
+    marginBottom: 10,
+    backgroundColor: "#fff",
+    borderRadius: 4,
+    height: 45,
+    padding: 10,
+    borderWidth: 1,
+    borderColor: "#141414",
   },
-  handleLogin:{
-      alignItems: 'center',
-      justifyContent: 'center',
-      height: 45,
-      marginBottom: 10,
+  handleLogin: {
+    alignItems: "center",
+    justifyContent: "center",
+    height: 45,
+    marginBottom: 10,
   },
-  loginText:{
-      color: '#fff',
-      fontSize: 17,
+  loginText: {
+    color: "#fff",
+    fontSize: 17,
   },
 });
